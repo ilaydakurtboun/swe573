@@ -3,6 +3,7 @@ from .serializers import UserRegisterSerializer,UserLoginSerializer
 from .models import User
 # Create your views here.
 from rest_framework.views import APIView
+from django.template.response import TemplateResponse
 
 def index(request):
     return render (request=request, template_name="main.html")
@@ -24,14 +25,23 @@ def register(request):
     password2=request.POST['password2']
 
     print(first_name,last_name,email,password,password2)
+    user_exist = User.objects.filter(email=email).first()
+    if user_exist:
+        args={}
+        args['error'] = "Already have an account with the email."
+        return render(request,'error.html', args)
+    else:
+        serializer = UserRegisterSerializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            return render (request=request, template_name="login.html")
+        else:
+            args={}
+            args['error'] = "Passwords are not matched"
+            return render(request,'error.html', args)
 
-    serializer = UserRegisterSerializer(data=request.POST)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    email = serializer.data.get("email")
-    user = User.objects.filter(email=email).first()
 
-    return render (request=request, template_name="login.html")
+
 
 
 def login_form(request):
@@ -43,6 +53,9 @@ def login(request):
     email=request.POST['email']
     user = User.objects.get(email=email)
     serializer = UserLoginSerializer(data=data)
-    if serializer.is_valid(raise_exception=True):
+    if serializer.is_valid():
         return render (request=request, template_name="loginSuccess.html")
-    return render (request=request, template_name="main.html")
+    else:
+        args={}
+        args['error']="Incorrect Credentials"
+        return render (request, "error.html",args)
