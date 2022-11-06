@@ -28,7 +28,7 @@ def register(request):
     user_exist = User.objects.filter(email=email).first()
     if user_exist:
         args={}
-        args['error'] = "Already have an account with the email."
+        args['error'] = "There is already an account with this email."
         return render(request,'error.html', args)
     else:
         serializer = UserRegisterSerializer(data=request.POST)
@@ -37,7 +37,7 @@ def register(request):
             return render (request=request, template_name="login.html")
         else:
             args={}
-            args['error'] = "Passwords are not matched"
+            args['error'] = "Passwords are not matched."
             return render(request,'error.html', args)
 
 
@@ -51,11 +51,15 @@ def login_form(request):
 def login(request):
     data = request.POST
     email=request.POST['email']
-    user = User.objects.get(email=email)
+    user = User.objects.filter(email=email).first()
+    if not user:
+        args={}
+        args['error']="There is no account with this email."
+        return render (request, "error.html",args)
     serializer = UserLoginSerializer(data=data)
     if serializer.is_valid():
         return render (request=request, template_name="loginSuccess.html")
     else:
         args={}
-        args['error']="Incorrect Credentials"
+        args['error']="Incorrect password."
         return render (request, "error.html",args)
