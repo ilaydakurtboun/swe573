@@ -1,7 +1,15 @@
 FROM python:3.8-alpine
+
 ENV PYTHONUNBUFFERED 1
+
 COPY ./requirements.txt /requirements.txt
+RUN apk update
+RUN apk add --update  --no-cache postgresql-client jpeg-dev libffi-dev gcc vim
+# jpeg-dev, musl-dev, zlib & zlib-dev is required for Pillow (image upload)
+RUN apk add --update  --no-cache --virtual .tmp-build-deps \
+      libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev
 RUN pip install -r /requirements.txt
+RUN apk del .tmp-build-deps
 
 EXPOSE 8000
 ENV LC_ALL=en_US.UTF8
