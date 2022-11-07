@@ -7,8 +7,6 @@ services:
     restart: always
     ports:
       - "8000:8000"
-    volumes:
-      - ./app:/app
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&           
@@ -22,6 +20,7 @@ services:
       - db
       - elasticsearch
     volumes:
+      - ./app:/app
       - media_volume:/app/media
       - static_volume:/app/static
 
