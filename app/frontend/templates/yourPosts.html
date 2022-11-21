@@ -1,0 +1,290 @@
+<form method="post" enctype="multipart/form-data" action="http://127.0.0.1:8000/feed/post/">
+  {% csrf_token %}
+
+
+  <head>
+    <meta charset="utf-8">
+
+
+    <title>Meet All</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet">
+
+
+    <style>
+      body {
+        background: #E5E5E5;
+        margin: auto
+      }
+
+      .Main {
+        overflow: hidden;
+        position: relative;
+        margin: auto
+      }
+
+      .Main {
+        background-color: rgba(255, 255, 255, 1);
+        width: 100%;
+        height: relative;
+        /* position: relative; */
+      }
+
+      .Header {
+        background-color: rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1);
+        width: 100%;
+        height: 100px;
+        position: relative;
+        margin: auto;
+        left: 0px;
+        top: -1px;
+      }
+
+      .MEET_ALL {
+        color: rgba(255, 255, 255, 1);
+        width: 100%;
+        height: 61px;
+        position: absolute;
+        top: 24px;
+        font-family: Inter;
+        text-align: center;
+        font-size: 40px;
+        letter-spacing: 0;
+      }
+
+
+      .Profile_Section {
+        background-color: rgba(255, 255, 255, 1);
+        width: 150px;
+        height: 60px;
+        border: 1px solid rgba(0, 0, 0, 1);
+        position: relative;
+
+      }
+
+      .Menu_Section {
+        background-color: rgba(255, 255, 255, 1);
+        width: 150px;
+        height: 500%;
+        border: 1px solid rgba(0, 0, 0, 1);
+        position: relative;
+
+
+      }
+
+      .Feed_Section {
+        background-color: rgba(255, 255, 255, 1);
+        width: auto;
+        height: auto;
+        left: 200px;
+        right: 50px;
+        position: absolute;
+        margin: auto;
+        text-align: center;
+        /* border: 1px solid rgba(0, 0, 0, 1); */
+      }
+
+      .Feed_Buttons {
+        text-align: center;
+        position: relative;
+        margin: auto;
+        left: 200px;
+      }
+
+      .Post_Create_Section {
+        text-align: center;
+        position: relative;
+        margin: auto;
+        border: 1px solid rgba(0, 0, 0, 1);
+        background-color: rgba(255, 255, 255, 1);
+        width: 1000px;
+        height: 300px;
+        top: 50px;
+      }
+
+      .Post_List {
+        text-align: left;
+        position: relative;
+        margin: auto;
+        border: 1px solid rgba(0, 0, 0, 1);
+        background-color: rgba(255, 255, 255, 1);
+        width: 1000px;
+        height: relative;
+        top: 50px;
+        right: 20px;
+        border-radius: 10px;
+
+      }
+
+      .Post {
+
+        font-family: Inter;
+        text-align: left;
+        position: relative;
+        margin: auto;
+        font-size: 15px;
+        letter-spacing: 0;
+      }
+
+      .Button {
+        text-align: center;
+        position: relative;
+      }
+
+      .Profile {
+        text-align: center;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div class=Main>
+      <div class="Header"></div><span class="MEET_ALL">MEET ALL</span>
+      <div class="Feed_Section">
+        <div class=Feed_Buttons>
+          <button onclick="window.location.href='http://127.0.0.1:8000/feed/space/'" name="Spaces" type="button" style="background-color:rgba(255, 255, 255, 1);
+                                          width: 150px;
+                                          height: 40px;
+                                          border-radius: 10px;
+                                          top: 15px;
+                                          right:250px;
+                                          font-size: 15px;
+                                          text-align: center;
+                                          position: relative; 
+                                            ">Spaces</button>
+
+          <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/'" name="RecentPosts" type="button"
+            style="background-color: rgba(255, 255, 255, 1);
+                                          width: 150px;
+                                          height: 40px;
+                                          border-radius: 10px;
+                                          top: 15px;
+                                        right:240px;
+                                          font-size: 15px;
+                                          text-align: center;
+                                          position: relative;
+                                            ">Recent Posts</button>
+          <button onclick="window.location.href='http://127.0.0.1:8000/feed/space/own_spaces/'" name="YourSpaces"
+            type="button" style="background-color:   rgba(255, 255, 255, 1);
+                                        width: 150px;
+                                         height: 40px;
+                                          border-radius: 10px;
+                                          top: 15px;
+                                        right:230px;
+                                          font-size: 15px;
+                                          text-align: center;
+                                          position: relative;
+                                              
+                                            ">Your Spaces</button>
+          <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/own_posts/'" name="YourPosts"
+            type="button" style="background-color:  rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1); 
+                                        width: 150px;
+                                         height: 40px;
+                                          border-radius: 10px;
+                                          top: 15px;
+                                        right:220px;
+                                          font-size: 15px;
+                                          text-align: center;
+                                          position: relative;
+                                              color:rgba(255, 255, 255, 1);
+                                            ">Your Posts</button>
+          <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/liked_posts/'" name="LikedPosts"
+            type="button" style="background-color: rgba(255, 255, 255, 1);
+                                                                                                width: 150px;
+                                                                                                height: 40px;
+                                                                                                border-radius: 10px;
+                                                                                                top: 15px;
+                                                                                              right:210px;
+                                                                                                font-size: 15px;
+                                                                                                text-align: center;
+                                                                                                position: relative;            
+                                                                                                  ">Liked
+            Posts</button>
+          <button name="Search" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                                        width: 150px;
+                                         height: 40px;
+                                          border-radius: 10px;
+                                          top: 15px;
+                                            right:100px;
+                                          font-size: 15px;
+                                          text-align: center;
+                                          position: relative;
+                                            ">Search</button>
+        </div>
+        <div class="Post_List_Section">
+          <ul>
+            {% for post in posts %}
+            <div class="Post_list"><span class="Post"><b>{{ post.title }} </b><br>
+                {{post.description}}<br>
+                {{post.platform}}
+                <br>
+                {{post.link}}</span>
+            </div>
+
+            {% endfor %}
+          </ul>
+
+
+        </div>
+
+      </div>
+
+
+      <div class="Profile_Section">
+        <div class=Profile>
+          <button name="Profile" type="button" style="background-color:rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1);
+                                 width: 100%;
+                              height: 40px;
+                              border-radius: 10px;
+                              top: 10px;
+                              font-size: 15px;
+                              text-align: center;
+                              position: relative;
+                            color: rgba(255, 255, 255, 1);
+                                ">{{owner}}</button>
+        </div>
+      </div>
+
+      <div class="Menu_Section">
+        <div class=Button>
+          <button name="Menu" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                              width: 100%;
+                              height: 40px;
+                              border-radius: 10px;
+                              top: 30px;
+                              font-size: 15px;
+                              text-align: center;
+                              position: relative;
+                                ">Menu</button>
+          <button name="YourProfile" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                              width: 100%;
+                              height: 40px;
+                              border-radius: 10px;
+                              top: 45px;
+                              font-size: 15px;
+                              text-align: center;
+                              position: relative;
+                                ">Your Profile</button>
+          <button name="Notifications" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                              width: 100%;
+                              height: 40px;
+                              border-radius: 10px;
+                              top: 60px;
+                              font-size: 15px;
+                              text-align: center;
+                              position: relative;
+                                ">Notifications</button>
+          <button onclick="window.location.href='http://127.0.0.1:8000/user/logout/'" name="Logout" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                                                                          width: 100%;
+                                                                          height: 40px;
+                                                                          border-radius: 10px;
+                                                                          top: 75px;
+                                                                          font-size: 15px;
+                                                                          text-align: center;
+                                                                          position: relative;
+                                                                            ">Logout</button>
+        </div>
+      </div>
+
+    </div>
+  </body>
