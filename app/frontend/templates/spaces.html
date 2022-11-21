@@ -25,7 +25,7 @@
             .Main {
                 background-color: rgba(255, 255, 255, 1);
                 width: 100%;
-                height: 100%;
+                height: relative;
                 /* position: relative; */
             }
 
@@ -64,17 +64,16 @@
             .Menu_Section {
                 background-color: rgba(255, 255, 255, 1);
                 width: 150px;
-                height: 100%;
+                height: 500%;
                 border: 1px solid rgba(0, 0, 0, 1);
                 position: relative;
-
 
             }
 
             .Feed_Section {
                 background-color: rgba(255, 255, 255, 1);
                 width: auto;
-                height: 100%;
+                height: relative;
                 left: 200px;
                 right: 50px;
                 position: absolute;
@@ -147,7 +146,7 @@
                                           height: 40px;
                                           border-radius: 10px;
                                           top: 15px;
-                                          right:350px;
+                                          right:250px;
                                           font-size: 15px;
                                           text-align: center;
                                           position: relative; 
@@ -160,37 +159,53 @@
                                           height: 40px;
                                           border-radius: 10px;
                                           top: 15px;
-                                        right:325px;
+                                        right:240px;
                                           font-size: 15px;
                                           text-align: center;
                                           position: relative;
                                             ">Recent Posts</button>
-                    <button name="YourList" type=" button" style="background-color:  rgba(255, 255, 255, 1);
-                                          width: 150px;
-                                          height: 40px;
-                                          border-radius: 10px;
-                                          top: 15px;
-                                        right:300px;
-                                          font-size: 15px;
-                                          text-align: center;
-                                          position: relative;
-                                            ">Your Lists</button>
-                    <button name="YourPosts" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                    <button onclick="window.location.href='http://127.0.0.1:8000/feed/space/own_spaces/'"
+                        name="YourSpaces" type="button" style="background-color: rgba(255, 255, 255, 1);
+                                                                                            width: 150px;
+                                                                                             height: 40px;
+                                                                                              border-radius: 10px;
+                                                                                              top: 15px;
+                                                                                            right:230px;
+                                                                                              font-size: 15px;
+                                                                                              text-align: center;
+                                                                                              position: relative;
+                                                                                          
+                                                                                                ">Your Spaces</button>
+
+                    <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/own_posts/'" name="YourPosts"
+                        type="button" style="background-color:  rgba(255, 255, 255, 1);
                                         width: 150px;
                                          height: 40px;
                                           border-radius: 10px;
                                           top: 15px;
-                                        right:275px;
+                                        right:220px;
                                           font-size: 15px;
                                           text-align: center;
                                           position: relative;
                                             ">Your Posts</button>
+                    <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/liked_posts/'"
+                        name="Liked Posts" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                                                                                                      width: 150px;
+                                                                                                      height: 40px;
+                                                                                                      border-radius: 10px;
+                                                                                                      top: 15px;
+                                                                                                    right:210px;
+                                                                                                      font-size: 15px;
+                                                                                                      text-align: center;
+                                                                                                      position: relative;
+                                                                                                        ">Liked
+                        Posts</button>
                     <button name="Search" type="button" style="background-color:  rgba(255, 255, 255, 1);
                                         width: 150px;
                                          height: 40px;
                                           border-radius: 10px;
                                           top: 15px;
-                                            right:50px;
+                                            right:100px;
                                           font-size: 15px;
                                           text-align: center;
                                           position: relative;
@@ -238,8 +253,8 @@
                     <ul>
                         {% for space in spaces %}
                         <div class="Space_List">
-                            <div class="Space">Title: {{ space.title }} <br>
-                                Description:{{space.description}}
+                            <div class="Space"><b> {{ space.title }}</b> <br>
+                                {{space.description}}
                             </div>
                             <button
                                 onclick="window.location.href='http://127.0.0.1:8000/feed/space/' + {{space.id}} + '/'"

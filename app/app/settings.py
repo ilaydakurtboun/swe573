@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'import_export',
     'user',
     'frontend',
-    'feed'
+    'feed',
 ]
 
 MIDDLEWARE = [

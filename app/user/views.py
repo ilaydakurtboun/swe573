@@ -14,7 +14,8 @@ from feed.models import Space
 
 def index(request):
     print(request.user)
-    return render (request=request, template_name="main.html")
+    spaces = Space.objects.all()
+    return render (request,"main.html",{"spaces":spaces})
 
 class UserViewSet(viewsets.ModelViewSet):
     User = get_user_model()
