@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'import_export',
     'user',
-    'frontend'
+    'frontend',
+    'feed'
 ]
 
 MIDDLEWARE = [
@@ -119,6 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+APPEND_SLASH = False
 
 REST_FRAMEWORK = {
 
@@ -292,3 +294,11 @@ JAZZMIN_SETTINGS = {
     # Add a language dropdown into the admin
     "language_chooser": True,
 }
+
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_HOST_USER = "swe573.2022.fall@gmail.com"
+# EMAIL_HOST_PASSWORD = "SWE5732022Fall"
+# EMAIL_PORT = 587
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_TIMEOUT = 60
+# EMAIL_USE_TLS = True

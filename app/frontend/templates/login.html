@@ -1,4 +1,4 @@
-<form method="post" enctype="multipart/form-data" action="login">
+<form method="post" enctype="multipart/form-data" action="http://127.0.0.1:8000/user/login/">
   {% csrf_token %}
 
   <head>
@@ -61,7 +61,7 @@
       }
 
       .Login_Form {
-        background-color:  rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 1);
         width: 750px;
         height: 392px;
         position: absolute;
@@ -105,6 +105,10 @@
         text-align: right;
       }
 
+      .ResetPassword {
+        text-align: left;
+      }
+
       .Button {
         text-align: center;
       }
@@ -116,7 +120,8 @@
     <div class=Main>
       <div class="Header"></div><span class="MEET_ALL">WELCOME TO MEET ALL</span>
       <div class=Button>
-        <button onclick="window.location.href='register_form'" name="Register" type="button" style="background-color:  rgba(255, 255, 255, 1);
+        <button onclick="window.location.href='http://127.0.0.1:8000/user/register_form/'" name="Register" type="button"
+          style="background-color:  rgba(255, 255, 255, 1);
                                         width: 200px;
                                         height: 50px;
                                         border-radius: 10px;
@@ -125,7 +130,8 @@
                                         text-align: center;
                                         position: relative;
                                   ">Register</button>
-        <button onclick="window.location.href='login_form'" name="Login" type="button" style="background: rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1);
+        <button onclick="window.location.href='http://127.0.0.1:8000/user/login_form/'" name="Login" type="button"
+          style="background: rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1);
           width: 200px;
           height: 50px;
           border-radius: 10px;
@@ -134,7 +140,6 @@
           text-align: center;
           position: relative;
           color: rgba(255, 255, 255, 1);
-
             ">Login</button>
       </div>
 
@@ -162,22 +167,35 @@
       border-top-right-radius: 10px;
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;">
-        <div class=Submit>
-          <input value="Submit" type="submit" style="background-color: rgba(255, 255, 255, 1);
+        <div class=ResetPassword>
+          <button onclick="window.location.href='http://127.0.0.1:8000/user/reset_password_form/'" name="Reset Password"
+            type="button" style="background: rgba(255, 255, 255, 1);
+                   width: relative;
+                                                                    height: 30px;
+                                                                    border-radius: 10px;
+                                                                    top:275px;
+                                                                    left: 75px;
+                                                                    font-size: 13px;
+                                                                    text-align: left;
+                                                                    position: relative;
+                      ">Forgot Your Password?</button>
+
+          <div class=Submit>
+            <input value="Submit" type="submit" style="background-color: rgba(255, 255, 255, 1);
                                                                     width: 100px;
                                                                     height: 40px;
                                                                     border-radius: 10px;
-                                                                    top: 300px;
+                                                                    top: 250px;
                                                                     right: 80px;
                                                                     font-size: 15px;
                                                                     text-align: center;
                                                                     position: relative;
                                                               ">
 
+          </div>
         </div>
-      </div>
 
-    </div>
+      </div>
   </body>
 
 </form>

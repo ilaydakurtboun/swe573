@@ -44,4 +44,5 @@ urlpatterns = [
                                          cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path('', include('user.urls')),
+    path('feed/', include('feed.urls')),
 ]
