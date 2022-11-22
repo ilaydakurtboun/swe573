@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'user',
     'frontend',
     'feed',
+    'media'
 ]
 
 MIDDLEWARE = [
@@ -295,10 +296,11 @@ JAZZMIN_SETTINGS = {
     "language_chooser": True,
 }
 
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_HOST_USER = "swe573.2022.fall@gmail.com"
-# EMAIL_HOST_PASSWORD = "SWE5732022Fall"
-# EMAIL_PORT = 587
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_TIMEOUT = 60
-# EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "swe573fall2022@gmail.com"
+EMAIL_HOST_PASSWORD = "bhtv nxhm xedl jhmo"
+EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_TIMEOUT = 60
+EMAIL_USE_TLS = True
+

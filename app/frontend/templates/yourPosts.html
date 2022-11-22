@@ -1,5 +1,6 @@
 <form method="post" enctype="multipart/form-data" action="http://127.0.0.1:8000/feed/post/">
   {% csrf_token %}
+  {% load static %}
 
 
   <head>
@@ -125,6 +126,90 @@
         letter-spacing: 0;
       }
 
+      .Post_Image {
+
+        text-align: left;
+        position: relative;
+        margin: auto;
+        top: 70px;
+        left: 20px;
+      }
+
+      .Post_Owner {
+        text-align: left;
+        position: relative;
+        margin: auto;
+        /* border: 1px solid rgba(0, 0, 0, 1); */
+        width: 100px;
+        height: 20px;
+        top: -140px;
+        right: 440px;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .Post_Created_Time {
+        text-align: left;
+        position: relative;
+        margin: auto;
+        width: 300px;
+        height: 20px;
+        top: -160px;
+        right: 370px;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .Post_Platform {
+        text-align: right;
+        position: relative;
+        margin: auto;
+        width: 100px;
+        height: 20px;
+        top: -155px;
+        left: 400px;
+        /* border-radius: 10px; */
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 1);
+
+      }
+
+      .Post_Title {
+        text-align: center;
+        position: relative;
+        margin: auto;
+        width: 600px;
+        height: relative;
+        top: -120px;
+        left: 100px;
+        border-radius: 10px;
+        text-align: left;
+      }
+
+      .Post_Description {
+        text-align: center;
+        position: relative;
+        margin: auto;
+        width: 600px;
+        height: relative;
+        top: -100px;
+        left: 100px;
+        border-radius: 10px;
+        text-align: left;
+      }
+
+      .Post_Link {
+        text-align: center;
+        position: relative;
+        margin: auto;
+        width: 600px;
+        height: relative;
+        top: -80px;
+        left: 100px;
+        border-radius: 10px;
+        text-align: left;
+      }
+
       .Button {
         text-align: center;
         position: relative;
@@ -214,11 +299,22 @@
         <div class="Post_List_Section">
           <ul>
             {% for post in posts %}
-            <div class="Post_list"><span class="Post"><b>{{ post.title }} </b><br>
-                {{post.description}}<br>
-                {{post.platform}}
-                <br>
-                {{post.link}}</span>
+            <div class="Post_list"><span class="Post">
+                <div class="Post_Image"> <img src="/media/{{ post.image }}" alt="Post" width="150" height="150">
+                </div>
+                <div class="Post_Owner"> <b>{{ post.owner.first_name }} {{ post.owner.last_name }}</b>
+                </div>
+                <div class="Post_Platform"> {{ post.platform}}
+                </div>
+                <div class="Post_Created_Time"> {{ post.created_time}}
+                </div>
+                <div class="Post_Title"> {{ post.title}}
+                </div>
+                <div class="Post_Description"> {{ post.description}}
+                </div>
+                <div class="Post_Link"> {{ post.link}}
+                </div>
+              </span>
             </div>
 
             {% endfor %}
