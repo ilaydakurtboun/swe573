@@ -124,7 +124,7 @@ class PostViewSet(viewsets.ModelViewSet):
         post = self.get_object()
         post.liked_by.remove(user)
         post.save()
-        posts = Post.objects.all().order_by("-id")
+        posts = Post.objects.filter(liked_by__id = user.id).order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)   
         return render (request, "likedPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
 
