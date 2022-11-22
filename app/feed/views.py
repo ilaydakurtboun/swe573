@@ -43,9 +43,9 @@ class SpaceViewSet(viewsets.ModelViewSet):
         return Response("Deleted successfully",status=200)
 
     def list(self, request, *args, **kwargs):
-        user = request.user
-        if user:
-            spaces = Space.objects.all().order_by("-id")
+        spaces = Space.objects.all().order_by("-id")
+        if request.user.is_anonymous == False:
+            user = request.user
             return render (request, "spaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name})
         else:
             return render (request, "spaces.html",{"spaces":spaces})
@@ -118,6 +118,16 @@ class PostViewSet(viewsets.ModelViewSet):
         # return Response({"detail":"Liked succesfully"},status=200)   
         return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
 
+    @action(detail=True, methods=['get'], name='Like Post')
+    def undo_like_post(self, request, pk=None):
+        user = User.objects.filter(id=request.user.id).first()      
+        post = self.get_object()
+        post.liked_by.remove(user)
+        post.save()
+        posts = Post.objects.all().order_by("-id")
+        # return Response({"detail":"Liked succesfully"},status=200)   
+        return render (request, "likedPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+
     @action(detail=False, methods=['get'], name='Liked Posts')
     def liked_posts(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()      
@@ -150,9 +160,13 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response({"detail":"Added to space succesfully"},status=200)     
 
     def list(self, request, *args, **kwargs):
-        user = request.user
         posts = Post.objects.all().order_by("-id")
-        return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        if request.user.is_anonymous == False:
+            user = request.user
+            return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        else:
+            return Response(PostListSerializer(posts,many=True).data,status=200)     
+
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

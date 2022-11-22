@@ -121,7 +121,7 @@ class UserViewSet(viewsets.ModelViewSet):
         email = data.get("email")
         code = uuid.uuid4()
         ResetPassword.objects.create(email=email,code=code)
-        # sendEmail(email,code)
+        sendEmail(email,code)
         # return Response({"detail": "The code for resetting password is sent to your email address."})
         return render (request=request, template_name="resetPassword.html")
 
