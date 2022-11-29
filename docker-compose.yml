@@ -23,7 +23,9 @@ services:
       - ./app:/app
       - media_volume:/app/media
       - static_volume:/app/static
-
+    env_file:
+      - ./.env
+      
   db:
     image: postgres:12-alpine
     restart: always
