@@ -165,8 +165,8 @@ class PostViewSet(viewsets.ModelViewSet):
             user = request.user
             return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
         else:
-            return Response(PostListSerializer(posts,many=True).data,status=200)     
-
+            # return Response(PostListSerializer(posts,many=True).data,status=200)     
+            return render (request, "posts.html",{"posts":posts})
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
