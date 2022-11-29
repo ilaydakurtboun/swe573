@@ -306,8 +306,8 @@ JAZZMIN_SETTINGS = {
 EMAIL_HOST = get_env_variable("EMAIL_HOST")
 EMAIL_HOST_USER = get_env_variable("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =get_env_variable("EMAIL_HOST_PASSWORD")
-EMAIL_PORT =get_env_variable("EMAIL_PORT")
+EMAIL_PORT = 587
 EMAIL_BACKEND = get_env_variable("EMAIL_BACKEND")
-EMAIL_TIMEOUT = get_env_variable("EMAIL_TIMEOUT")
+EMAIL_TIMEOUT = 60
 EMAIL_USE_TLS = True
 
