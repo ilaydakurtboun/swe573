@@ -12,10 +12,10 @@ services:
              python manage.py migrate &&           
              python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=db
-      - DB_NAME=app
-      - DB_USER=ilayda
-      - DB_PASS=123123
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     depends_on:
       - db
       - elasticsearch
@@ -29,9 +29,9 @@ services:
     restart: always
 
     environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: ilayda
-      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 
 volumes:
