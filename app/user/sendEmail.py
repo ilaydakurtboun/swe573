@@ -2,7 +2,7 @@ from django.core.mail import send_mail, get_connection, EmailMultiAlternatives
 
 def sendEmail(receiver,code):
     FROM = "swe573fall2022@gmail.com"
-    TO = ["ilaydaaakurt@gmail.com",]
+    TO = [receiver,]
     SUBJECT = "Reset Password for MeetAll"
     MESSAGE = 'The code to reset your password is: ' + str(code)
     messages = []
