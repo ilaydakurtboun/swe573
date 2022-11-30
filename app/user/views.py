@@ -116,8 +116,6 @@ class UserViewSet(viewsets.ModelViewSet):
             
     @action(detail=False, methods=["GET"])
     def logout(self, request, *args, **kwargs):
-        print(request.user)
-        user = User.objects.get(id=request.user.id)
         logout(request)
         return render (request, "login.html",{"DOMAIN_URL":DOMAIN_URL})
 
