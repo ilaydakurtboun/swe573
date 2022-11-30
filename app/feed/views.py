@@ -10,7 +10,7 @@ from .models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from user.models import User
-
+from app.settings import DOMAIN_URL
 
 # Create your views here.
 
@@ -28,14 +28,14 @@ class SpaceViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         spaces = Space.objects.all().order_by("-id")
         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        return render (request, "spaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name})
+        return render (request, "spaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
     
     @action(detail=False, methods=['get'], name='Own Spaces')
     def own_spaces(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()      
         spaces = Space.objects.filter(owner = user.id).order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)   
-        return render (request, "yourSpaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name})
+        return render (request, "yourSpaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
         
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -46,9 +46,9 @@ class SpaceViewSet(viewsets.ModelViewSet):
         spaces = Space.objects.all().order_by("-id")
         if request.user.is_anonymous == False:
             user = request.user
-            return render (request, "spaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name})
+            return render (request, "spaces.html",{"spaces":spaces,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
         else:
-            return render (request, "spaces.html",{"spaces":spaces})
+            return render (request, "spaces.html",{"spaces":spaces,"DOMAIN_URL":DOMAIN_URL})
 
 
     def retrieve(self, request, *args, **kwargs):
@@ -56,9 +56,9 @@ class SpaceViewSet(viewsets.ModelViewSet):
         data = SpaceListSerializer(space).data    
         if request.user.is_anonymous == False:
             user = request.user
-            return render (request, "spacePosts.html",{"space":data,"owner":user.first_name + " " + user.last_name})
+            return render (request, "spacePosts.html",{"space":data,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
         else:
-            return render (request, "mainPosts.html",{"space":data})
+            return render (request, "mainPosts.html",{"space":data,"DOMAIN_URL":DOMAIN_URL})
     
     def get_serializer_class(self, *args, **kwargs):
         if self.action == 'retrieve' or self.action == 'list':
@@ -106,7 +106,7 @@ class PostViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         posts = Post.objects.all().order_by("-id")
-        return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
 
     @action(detail=True, methods=['get'], name='Like Post')
     def like_post(self, request, pk=None):
@@ -116,7 +116,7 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         posts = Post.objects.all().order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)   
-        return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
 
     @action(detail=True, methods=['get'], name='Like Post')
     def undo_like_post(self, request, pk=None):
@@ -126,21 +126,21 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         posts = Post.objects.filter(liked_by__id = user.id).order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)   
-        return render (request, "likedPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        return render (request, "likedPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
 
     @action(detail=False, methods=['get'], name='Liked Posts')
     def liked_posts(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()      
         posts = Post.objects.filter(liked_by__id = user.id).order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)   
-        return render (request, "likedPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        return render (request, "likedPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
 
     @action(detail=False, methods=['get'], name='Liked Posts')
     def own_posts(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()      
         posts = Post.objects.filter(owner = user.id).order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)   
-        return render (request, "yourPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+        return render (request, "yourPosts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
 
     @action(detail=True, methods=['put'], name='Like Post')
     def add_label(self, request, pk=None):
@@ -163,10 +163,10 @@ class PostViewSet(viewsets.ModelViewSet):
         posts = Post.objects.all().order_by("-id")
         if request.user.is_anonymous == False:
             user = request.user
-            return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name})
+            return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
         else:
             # return Response(PostListSerializer(posts,many=True).data,status=200)     
-            return render (request, "posts.html",{"posts":posts})
+            return render (request, "posts.html",{"posts":posts,"DOMAIN_URL":DOMAIN_URL})
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
