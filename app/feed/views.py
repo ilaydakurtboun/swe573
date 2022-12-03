@@ -53,10 +53,11 @@ class SpaceViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         space = self.get_object()
-        data = SpaceListSerializer(space).data    
+        data = SpaceListSerializer(space).data
+        labels = Label.objects.all() 
         if request.user.is_anonymous == False:
             user = request.user
-            return render (request, "spacePosts.html",{"space":data,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
+            return render (request, "spacePosts.html",{"space":data,"labels":labels,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
         else:
             return render (request, "mainPosts.html",{"space":data,"DOMAIN_URL":DOMAIN_URL})
     
@@ -160,10 +161,12 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response({"detail":"Added to space succesfully"},status=200)     
 
     def list(self, request, *args, **kwargs):
-        posts = Post.objects.all().order_by("-id")
+        data = Post.objects.all().order_by("-id")
+        labels = Label.objects.all() 
+        posts=PostListSerializer(data,many=True).data
         if request.user.is_anonymous == False:
             user = request.user
-            return render (request, "posts.html",{"posts":posts,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
+            return render (request, "posts.html",{"posts":posts,"labels":labels,"owner":user.first_name + " " + user.last_name,"DOMAIN_URL":DOMAIN_URL})
         else:
             # return Response(PostListSerializer(posts,many=True).data,status=200)     
             return render (request, "posts.html",{"posts":posts,"DOMAIN_URL":DOMAIN_URL})
