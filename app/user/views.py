@@ -131,6 +131,28 @@ class UserViewSet(viewsets.ModelViewSet):
         logout(request)
         return render(request, "login.html", {"DOMAIN_URL": DOMAIN_URL})
 
+    @action(detail=False, methods=["get"], name="See Profile")
+    def profile_form(self, request, *args, **kwargs):
+        user = request.user
+        return render(request, "profilePage.html", {
+                    "owner": user.first_name + " " + user.last_name,
+                    "DOMAIN_URL": DOMAIN_URL,
+                },)
+    @action(detail=False, methods=["post"], name="Update Profile")
+    def profile_update_request(self, request, *args, **kwargs):
+        user = request.user
+        data=request.data
+        if request.data["first_name"]:
+            user.first_name=request.data["first_name"]
+            user.save()
+        if request.data["last_name"]:
+            user.last_name=request.data["last_name"]
+            user.save()
+        return render(request, "profilePage.html", {
+                    "owner": user.first_name + " " + user.last_name,
+                    "DOMAIN_URL": DOMAIN_URL,
+                },)
+
     @action(detail=False, methods=["get"], name="Reset Password")
     def reset_password_form(self, request, *args, **kwargs):
         return render(request, "resetPasswordRequest.html", {"DOMAIN_URL": DOMAIN_URL})
@@ -176,22 +198,49 @@ class UserViewSet(viewsets.ModelViewSet):
         args["DOMAIN_URL"] = DOMAIN_URL
         return render(request, "error.html", args)
 
-    @action(detail=True, methods=["put"], name="Change Password")
-    def change_password(self, request, pk=None):
+    @action(detail=False, methods=["get"], name="Change Password Form")
+    def change_password_form(self, request, pk=None):
+        user = request.user
+        return render(request, "changePassword.html", {
+                    "owner": user.first_name + " " + user.last_name,
+                    "DOMAIN_URL": DOMAIN_URL,
+                },)
+
+    @action(detail=False, methods=["post"], name="Change Password")
+    def change_password_request(self, request, pk=None):
         data = request.data
-        user = self.get_object()
+        user = request.user
         if user is None:
-            raise ValidationError({"error": "There is no such user"})
+            args = {}
+            args["error"] = "There is no such user"
+            args["DOMAIN_URL"] = DOMAIN_URL
+            args["owner"] =  user.first_name + " " + user.last_name
+
+            return render(request, "changePasswordError.html", args)
 
         if user.check_password(data["old_password"]) == False:
-            raise ValidationError({"error": "The old password does not match"})
+            args = {}
+            args["error"] = "The old password does not match"
+            args["DOMAIN_URL"] = DOMAIN_URL
+            args["owner"] =  user.first_name + " " + user.last_name
+
+            return render(request, "changePasswordError.html", args)
 
         if data["password"] != data["password2"]:
-            raise ValidationError({"error": "New passwords do not match"})
+            args = {}
+            args["error"] = "New passwords do not match"
+            args["owner"] =  user.first_name + " " + user.last_name
+            args["DOMAIN_URL"] = DOMAIN_URL
+            return render(request, "changePasswordError.html", args)
 
         user.set_password(data["password"])
         user.save()
-        return Response({"detail": "Changed succesfully"})
+        login(request, user)
+        return render(request, "changePassword.html", {
+                    "owner": user.first_name + " " + user.last_name,
+                    "DOMAIN_URL": DOMAIN_URL,
+                },)
+
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
