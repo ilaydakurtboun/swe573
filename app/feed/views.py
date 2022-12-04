@@ -211,7 +211,7 @@ class PostViewSet(viewsets.ModelViewSet):
     def own_posts(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()
         data = Post.objects.filter(owner=user.id).order_by("-id")
-        posts = PostListSerializer(data,many=True).data
+        posts = PostListSerializer(data, many=True).data
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
@@ -233,11 +233,12 @@ class PostViewSet(viewsets.ModelViewSet):
             "search.html",
             {
                 "posts": posts,
-                "spaces":spaces,
+                "spaces": spaces,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
         )
+
     @action(detail=False, methods=["post"], name="Search Request")
     def search_request(self, request, pk=None):
         user = request.user
@@ -246,15 +247,14 @@ class PostViewSet(viewsets.ModelViewSet):
         data = Post.objects.filter(
             Q(title__contains=search_keyword)
             | Q(description__contains=search_keyword)
-            | Q(platform__contains = search_keyword)
-            | Q(link__contains = search_keyword)
-            | Q(space__title__contains = search_keyword)
-            | Q(label__name__contains = search_keyword)
+            | Q(platform__contains=search_keyword)
+            | Q(link__contains=search_keyword)
+            | Q(space__title__contains=search_keyword)
+            | Q(label__name__contains=search_keyword)
         )
-        posts = PostListSerializer(data,many=True).data
+        posts = PostListSerializer(data, many=True).data
         spaces = Space.objects.filter(
-            Q(title__contains=search_keyword)
-            | Q(description__contains=search_keyword)
+            Q(title__contains=search_keyword) | Q(description__contains=search_keyword)
         )
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
