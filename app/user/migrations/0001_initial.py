@@ -12,25 +12,60 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('user_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='auth.user')),
-                ('photo', django_resized.forms.ResizedImageField(blank=True, crop=None, default='', force_format='PNG', keep_meta=True, null=True, quality=100, size=[200, 200], upload_to='user_photo')),
-                ('phone_number', models.BigIntegerField(blank=True, null=True, unique=True, validators=[django.core.validators.MinValueValidator(1000000), django.core.validators.MaxValueValidator(9999999999)], verbose_name='phone number')),
+                (
+                    "user_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="auth.user",
+                    ),
+                ),
+                (
+                    "photo",
+                    django_resized.forms.ResizedImageField(
+                        blank=True,
+                        crop=None,
+                        default="",
+                        force_format="PNG",
+                        keep_meta=True,
+                        null=True,
+                        quality=100,
+                        size=[200, 200],
+                        upload_to="user_photo",
+                    ),
+                ),
+                (
+                    "phone_number",
+                    models.BigIntegerField(
+                        blank=True,
+                        null=True,
+                        unique=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(1000000),
+                            django.core.validators.MaxValueValidator(9999999999),
+                        ],
+                        verbose_name="phone number",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-                'abstract': False,
+                "verbose_name": "user",
+                "verbose_name_plural": "users",
+                "abstract": False,
             },
-            bases=('auth.user',),
+            bases=("auth.user",),
             managers=[
-                ('objects', django.contrib.auth.models.UserManager()),
+                ("objects", django.contrib.auth.models.UserManager()),
             ],
         ),
     ]
