@@ -9,33 +9,35 @@ from rest_framework.exceptions import ValidationError
 class SpaceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
-        fields = '__all__'
-
+        fields = "__all__"
 
 
 class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
-        fields = '__all__'
+        fields = "__all__"
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = '__all__'
- 
+        fields = "__all__"
+
+
 class PostListSerializer(serializers.ModelSerializer):
     owner = UserListSerializer()
     liked_by = UserListSerializer(many=True)
     label = LabelSerializer(many=True)
+
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = "__all__"
 
 
 class SpaceListSerializer(serializers.ModelSerializer):
     owner = UserListSerializer()
-    space_posts=PostListSerializer(many=True)
+    space_posts = PostListSerializer(many=True)
+
     class Meta:
         model = Space
-        fields = '__all__'
+        fields = "__all__"
