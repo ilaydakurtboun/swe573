@@ -1,4 +1,4 @@
-<form method="post" enctype="multipart/form-data" action="http://127.0.0.1:8000/feed/post/">
+<form method="post" enctype="multipart/form-data" action="{{DOMAIN_URL}}/feed/post/">
   {% csrf_token %}
 
 
@@ -129,7 +129,7 @@
       <div class="Header"></div><span class="MEET_ALL">MEET ALL</span>
       <div class="Feed_Section">
         <div class=Feed_Buttons>
-          <button onclick="window.location.href='http://127.0.0.1:8000/feed/space/'" name="Spaces" type="button" style="background-color:rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/space/'" name="Spaces" type="button" style="background-color:rgba(255, 255, 255, 1);
                                           width: 150px;
                                           height: 40px;
                                           border-radius: 10px;
@@ -140,8 +140,7 @@
                                           position: relative; 
                                             ">Spaces</button>
 
-          <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/'" name="RecentPosts" type="button"
-            style="background-color: rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/post/'" name="RecentPosts" type="button" style="background-color: rgba(255, 255, 255, 1);
                                           width: 150px;
                                           height: 40px;
                                           border-radius: 10px;
@@ -151,8 +150,8 @@
                                           text-align: center;
                                           position: relative;
                                             ">Recent Posts</button>
-          <button onclick="window.location.href='http://127.0.0.1:8000/feed/space/own_spaces/'" name="YourSpaces"
-            type="button" style="background-color:   rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1); 
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/space/own_spaces/'" name="YourSpaces" type="button"
+            style="background-color:   rgba(30.00000011175871, 30.00000011175871, 30.00000011175871, 1); 
                                         width: 150px;
                                          height: 40px;
                                           border-radius: 10px;
@@ -164,8 +163,8 @@
                                                                                             color:rgba(255, 255, 255, 1);
 
                                             ">Your Spaces</button>
-          <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/own_posts/'" name="YourPosts"
-            type="button" style="background-color:  rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/post/own_posts/'" name="YourPosts" type="button"
+            style="background-color:  rgba(255, 255, 255, 1);
                                         width: 150px;
                                          height: 40px;
                                           border-radius: 10px;
@@ -175,8 +174,8 @@
                                           text-align: center;
                                           position: relative;
                                             ">Your Posts</button>
-          <button onclick="window.location.href='http://127.0.0.1:8000/feed/post/liked_posts/'" name="LikedPosts"
-            type="button" style="background-color: rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/post/liked_posts/'" name="LikedPosts" type="button"
+            style="background-color: rgba(255, 255, 255, 1);
                                                                                                 width: 150px;
                                                                                                 height: 40px;
                                                                                                 border-radius: 10px;
@@ -187,7 +186,8 @@
                                                                                                 position: relative;            
                                                                                                   ">Liked
             Posts</button>
-          <button name="Search" type="button" style="background-color:  rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/post/search_form/'" name="Search" type="button"
+            style="background-color:  rgba(255, 255, 255, 1);
                                         width: 150px;
                                          height: 40px;
                                           border-radius: 10px;
@@ -203,7 +203,7 @@
             {% for space in spaces %}
             <div class="Space_List"><span class="Space"><b>{{ space.title }} </b><br>
                 {{space.description}}
-                <button onclick="window.location.href='http://127.0.0.1:8000/feed/space/' + {{space.id}} + '/'"
+                <button onclick="window.location.href='{{DOMAIN_URL}}/feed/space/' + {{space.id}} + '/'"
                   name="ViewPosts" type="button" style="background-color:rgba(255, 255, 255, 1);
                                                                                               width: relative;
                                                                                               height: relative;
@@ -250,7 +250,8 @@
                               text-align: center;
                               position: relative;
                                 ">Menu</button>
-          <button name="YourProfile" type="button" style="background-color:  rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/user/profile_form/'" name="YourProfile" type="button"
+            style="background-color:  rgba(255, 255, 255, 1);
                               width: 100%;
                               height: 40px;
                               border-radius: 10px;
@@ -268,7 +269,7 @@
                               text-align: center;
                               position: relative;
                                 ">Notifications</button>
-          <button onclick="window.location.href='http://127.0.0.1:8000/user/logout/'" name="Logout" type="button" style="background-color:  rgba(255, 255, 255, 1);
+          <button onclick="window.location.href='{{DOMAIN_URL}}/user/logout/'" name="Logout" type="button" style="background-color:  rgba(255, 255, 255, 1);
                                                                           width: 100%;
                                                                           height: 40px;
                                                                           border-radius: 10px;
