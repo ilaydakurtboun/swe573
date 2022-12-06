@@ -145,7 +145,8 @@ class PostViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        posts = Post.objects.all().order_by("-id")
+        data = Post.objects.all().order_by("-id")
+        posts = PostListSerializer(data, many=True).data
         return render(
             request,
             "posts.html",
@@ -162,7 +163,9 @@ class PostViewSet(viewsets.ModelViewSet):
         post = self.get_object()
         post.liked_by.add(user)
         post.save()
-        posts = Post.objects.all().order_by("-id")
+        data = Post.objects.all().order_by("-id")
+        posts = PostListSerializer(data, many=True).data
+
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
@@ -180,7 +183,9 @@ class PostViewSet(viewsets.ModelViewSet):
         post = self.get_object()
         post.liked_by.remove(user)
         post.save()
-        posts = Post.objects.filter(liked_by__id=user.id).order_by("-id")
+        data = Post.objects.filter(liked_by__id=user.id).order_by("-id")
+        posts = PostListSerializer(data, many=True).data
+
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
@@ -195,7 +200,9 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"], name="Liked Posts")
     def liked_posts(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()
-        posts = Post.objects.filter(liked_by__id=user.id).order_by("-id")
+        data = Post.objects.filter(liked_by__id=user.id).order_by("-id")
+        posts = PostListSerializer(data, many=True).data
+
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
@@ -212,6 +219,7 @@ class PostViewSet(viewsets.ModelViewSet):
         user = User.objects.filter(id=request.user.id).first()
         data = Post.objects.filter(owner=user.id).order_by("-id")
         posts = PostListSerializer(data, many=True).data
+
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
