@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from user.models import User
+from user.models import User,Friends,FriendRequest
 
 
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -98,3 +98,49 @@ class UserLoginSerializer(ModelSerializer):
         data["token"] = token
         data["user"] = UserListSerializer(user_obj).data
         return data
+
+
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendRequest
+        fields = [
+            "id",
+            "sender",
+            "receiver",
+        ]
+        read_only_fields = ("id",)
+
+class FriendRequestListSerializer(serializers.ModelSerializer):
+    sender = UserListSerializer()
+    receiver = UserListSerializer()
+    class Meta:
+        model = FriendRequest
+        fields = [
+            "id",
+            "sender",
+            "receiver",
+        ]
+        read_only_fields = ("id",)
+
+class FriendsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friends
+        fields = [
+            "id",
+            "owner",
+            "friend_list",
+        ]
+        read_only_fields = ("id",)
+
+class FriendsListSerializer(serializers.ModelSerializer):
+    owner = UserListSerializer()
+    friend_list = UserListSerializer(many=True)
+    class Meta:
+        model = Friends
+        fields = [
+            "id",
+            "owner",
+            "friend_list",
+        ]
+        read_only_fields = ("id",)

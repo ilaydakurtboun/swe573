@@ -77,6 +77,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            Friends.objects.create(owner=User.objects.get(email=email))
             return render(request, "login.html", {"DOMAIN_URL": DOMAIN_URL})
         else:
             args = {}
@@ -131,6 +132,86 @@ class UserViewSet(viewsets.ModelViewSet):
         logout(request)
         return render(request, "login.html", {"DOMAIN_URL": DOMAIN_URL})
 
+    @action(detail=False, methods=["get"], name="See Profile")
+    def following(self, request, *args, **kwargs):
+        user = request.user
+        friends=Friends.objects.get(owner=user.id)
+        users=UserListSerializer(friends.friend_list.all(),many=True).data
+        return render(
+            request,
+            "following.html",
+            {
+                "users":users,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+    @action(detail=False, methods=["get"], name="See Profile")
+    def possible_to_know(self, request, *args, **kwargs):
+        user = request.user
+        users = User.objects.exclude(id=request.user.id)
+        user_data = UserListSerializer(users,many=True).data
+        return render(
+            request,
+            "possibleToKnow.html",
+            {
+                "users":user_data,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+    @action(detail=False, methods=["get"], name="See Profile")
+    def followers(self, request, *args, **kwargs):
+        user = request.user
+        followers = []
+        friends = Friends.objects.filter(friend_list__id__contains=user.id)
+        for friend in friends:
+            followers.append(UserListSerializer(friend.owner))
+        return render(
+            request,
+            "follower.html",
+            {
+                "users":followers,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+    @action(detail=False, methods=["post"], name="See Profile")
+    def follow(self, request, *args, **kwargs):
+        user = request.user
+        friends = Friends.objects.get(owner=user)
+        follow_people = request.data.get("follow_people")
+        friends.friend_list.add(follow_people)
+        friends.save()
+        users = User.objects.exclude(id=request.user.id)
+        user_data = UserListSerializer(users,many=True).data
+        return render(
+            request,
+            "possibleToKnow.html",
+            {
+                "users":user_data,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+    @action(detail=False, methods=["post"], name="See Profile")
+    def unfollow(self, request, *args, **kwargs):
+        user = request.user
+        friends = Friends.objects.get(owner=user)
+        follow_people = request.data.get("follow_people")
+        friends.friend_list.remove(follow_people)
+        friends.save()
+        users = User.objects.exclude(id=request.user.id)
+        user_data = UserListSerializer(users,many=True).data
+        return render(
+            request,
+            "following.html",
+            {
+                "users":user_data,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
     @action(detail=False, methods=["get"], name="See Profile")
     def profile_form(self, request, *args, **kwargs):
         user = request.user

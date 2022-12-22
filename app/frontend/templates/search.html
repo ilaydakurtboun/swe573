@@ -102,6 +102,19 @@
         top: 50px;
       }
 
+      .Checkboxes {
+        text-align: left;
+        position: absolute;
+        margin: auto;
+        width: 200px;
+        font-family: Inter;
+        height: 75px;
+        top: 50px;
+        left: 25px;
+        font-size: 15px;
+
+      }
+
       .Space_List {
         /* text-align: left; */
         position: relative;
@@ -111,7 +124,7 @@
         width: 1000px;
         height: 75px;
         top: 50px;
-        right: 20px;
+        right: 40px;
         border-radius: 10px;
 
       }
@@ -135,7 +148,7 @@
         width: 1000px;
         height: relative;
         top: 70px;
-        right: 20px;
+        right: 40px;
         border-radius: 10px;
 
       }
@@ -334,6 +347,14 @@
                                               border-top-right-radius: 10px;
                                               border-bottom-left-radius: 10px;
                                               border-bottom-right-radius: 10px;">
+          <div class="Checkboxes">
+            <input type="checkbox" id="space_check_box" name="space_check_box" value="Space">
+            <label for="label"> Spaces</label><br>
+            <input type="checkbox" id="post_check_box" name="post_check_box" value="Post">
+            <label for="label"> Posts</label><br>
+
+
+          </div>
 
           <div class=Submit>
             <input value=" Search" type="submit" style="background-color: rgba(255, 255, 255, 1);
@@ -404,7 +425,8 @@
                 </div>
                 <div class="Post_Description"> {{ post.description}}
                 </div>
-                <div class="Post_Link"> {{ post.link}}
+                <div class="Post_Link">
+                  <a href='{{post.post_link}}' target="_blank">{{post.post_link}}</a>
                 </div>
               </span>
             </div>
@@ -435,43 +457,84 @@
 
       <div class="Menu_Section">
         <div class=Button>
-          <button name="Menu" type="button" style="background-color:  rgba(255, 255, 255, 1);
-                              width: 100%;
-                              height: 40px;
-                              border-radius: 10px;
-                              top: 30px;
-                              font-size: 15px;
-                              text-align: center;
-                              position: relative;
-                                ">Menu</button>
+
+          <!-- <button name="Menu" type="button" style="background-color:  rgba(255, 255, 255, 1);
+                                              width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 30px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Menu</button> -->
           <button onclick="window.location.href='{{DOMAIN_URL}}/user/profile_form/'" name="YourProfile" type="button"
             style="background-color:  rgba(255, 255, 255, 1);
-                              width: 100%;
-                              height: 40px;
-                              border-radius: 10px;
-                              top: 45px;
-                              font-size: 15px;
-                              text-align: center;
-                              position: relative;
-                                ">Your Profile</button>
+                                                 width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 30px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Your Profile</button>
+          <button onclick="window.location.href='{{DOMAIN_URL}}/user/following/'" name="YourProfile" type="button"
+            style="background-color:  rgba(255, 255, 255, 1);
+                                                 width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 45px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Following</button>
+          <button onclick="window.location.href='{{DOMAIN_URL}}/user/followers/'" name="YourProfile" type="button"
+            style="background-color:  rgba(255, 255, 255, 1);
+                                                 width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 60px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Followers</button>
+          <button onclick="window.location.href='{{DOMAIN_URL}}/user/possible_to_know/'" name="YourProfile"
+            type="button" style="background-color:  rgba(255, 255, 255, 1);
+                                                 width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 75px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Possible to Know</button>
+          <button onclick="window.location.href='{{DOMAIN_URL}}/feed/post/bookmarked_posts/'" name="YourProfile"
+            type="button" style="background-color:  rgba(255, 255, 255, 1);
+                                              width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 100px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Your Bookmarks</button>
           <button name="Notifications" type="button" style="background-color:  rgba(255, 255, 255, 1);
-                              width: 100%;
-                              height: 40px;
-                              border-radius: 10px;
-                              top: 60px;
-                              font-size: 15px;
-                              text-align: center;
-                              position: relative;
-                                ">Notifications</button>
+                                              width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 115px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Notifications</button>
           <button onclick="window.location.href='{{DOMAIN_URL}}/user/logout/'" name="Logout" type="button" style="background-color:  rgba(255, 255, 255, 1);
-                                                                          width: 100%;
-                                                                          height: 40px;
-                                                                          border-radius: 10px;
-                                                                          top: 75px;
-                                                                          font-size: 15px;
-                                                                          text-align: center;
-                                                                          position: relative;
-                                                                            ">Logout</button>
+                                              width: 100%;
+                                              height: 40px;
+                                              border-radius: 10px;
+                                              top: 130px;
+                                              font-size: 15px;
+                                              text-align: center;
+                                              position: relative;
+                                                ">Logout</button>
         </div>
       </div>
 

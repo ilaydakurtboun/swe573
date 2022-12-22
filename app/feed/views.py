@@ -54,6 +54,21 @@ class SpaceViewSet(viewsets.ModelViewSet):
                 "DOMAIN_URL": DOMAIN_URL,
             },
         )
+    @action(detail=True, methods=["get"], name="Own Spaces")
+    def person_spaces(self, request, pk=None):
+        user = request.user
+        person = User.objects.get(id=pk)
+        spaces = Space.objects.filter(owner=person.id).order_by("-id")
+        # return Response({"detail":"Liked succesfully"},status=200)
+        return render(
+            request,
+            "personSpaces.html",
+            {
+                "spaces": spaces,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -165,12 +180,14 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         data = Post.objects.all().order_by("-id")
         posts = PostListSerializer(data, many=True).data
-
+        space_obj = Space.objects.get(id=post.space.id)
+        space = SpaceListSerializer(space_obj).data
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
-            "posts.html",
+            "spacePosts.html",
             {
+                "space":space,
                 "posts": posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
@@ -197,6 +214,48 @@ class PostViewSet(viewsets.ModelViewSet):
             },
         )
 
+    @action(detail=True, methods=["get"], name="Like Post")
+    def bookmark_post(self, request, pk=None):
+        user = User.objects.filter(id=request.user.id).first()
+        post = self.get_object()
+        post.bookmarked_by.add(user)
+        post.save()
+        data = Post.objects.all().order_by("-id")
+        posts = PostListSerializer(data, many=True).data
+        space_obj = Space.objects.get(id=post.space.id)
+        space = SpaceListSerializer(space_obj).data
+        # return Response({"detail":"Liked succesfully"},status=200)
+        return render(
+            request,
+            "spacePosts.html",
+            {
+                "space":space,
+                "posts": posts,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+
+    @action(detail=True, methods=["get"], name="Like Post")
+    def undo_bookmark_post(self, request, pk=None):
+        user = User.objects.filter(id=request.user.id).first()
+        post = self.get_object()
+        post.bookmarked_by.remove(user)
+        post.save()
+        data = Post.objects.filter(bookmarked_by__id=user.id).order_by("-id")
+        posts = PostListSerializer(data, many=True).data
+
+        # return Response({"detail":"Liked succesfully"},status=200)
+        return render(
+            request,
+            "bookmarkedPosts.html",
+            {
+                "posts": posts,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+
     @action(detail=False, methods=["get"], name="Liked Posts")
     def liked_posts(self, request, pk=None):
         user = User.objects.filter(id=request.user.id).first()
@@ -207,6 +266,22 @@ class PostViewSet(viewsets.ModelViewSet):
         return render(
             request,
             "likedPosts.html",
+            {
+                "posts": posts,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+    @action(detail=False, methods=["get"], name="Liked Posts")
+    def bookmarked_posts(self, request, pk=None):
+        user = User.objects.filter(id=request.user.id).first()
+        data = Post.objects.filter(bookmarked_by__id=user.id).order_by("-id")
+        posts = PostListSerializer(data, many=True).data
+
+        # return Response({"detail":"Liked succesfully"},status=200)
+        return render(
+            request,
+            "bookmarkedPosts.html",
             {
                 "posts": posts,
                 "owner": user.first_name + " " + user.last_name,
@@ -252,18 +327,40 @@ class PostViewSet(viewsets.ModelViewSet):
         user = request.user
         data = request.data
         search_keyword = data["search_keyword"]
-        data = Post.objects.filter(
-            Q(title__contains=search_keyword)
-            | Q(description__contains=search_keyword)
-            | Q(platform__contains=search_keyword)
-            | Q(link__contains=search_keyword)
-            | Q(space__title__contains=search_keyword)
-            | Q(label__name__contains=search_keyword)
-        )
-        posts = PostListSerializer(data, many=True).data
-        spaces = Space.objects.filter(
+        space_check_box = data.get("space_check_box")
+        post_check_box = data.get("post_check_box")
+
+        if space_check_box and not post_check_box:
+            space_data = Space.objects.filter(
             Q(title__contains=search_keyword) | Q(description__contains=search_keyword)
-        )
+        )   
+            post_data=None
+
+        elif post_check_box and not space_check_box:
+            post_data = Post.objects.filter(
+                Q(title__contains=search_keyword)
+                | Q(description__contains=search_keyword)
+                | Q(platform__contains=search_keyword)
+                | Q(link__contains=search_keyword)
+                | Q(space__title__contains=search_keyword)
+                | Q(label__name__contains=search_keyword)
+            )
+            space_data=None
+        else:
+            space_data = Space.objects.filter(
+            Q(title__contains=search_keyword) | Q(description__contains=search_keyword)
+            )
+            post_data = Post.objects.filter(
+                Q(title__contains=search_keyword)
+                | Q(description__contains=search_keyword)
+                | Q(platform__contains=search_keyword)
+                | Q(link__contains=search_keyword)
+                | Q(space__title__contains=search_keyword)
+                | Q(label__name__contains=search_keyword)
+            )
+        posts = PostListSerializer(post_data, many=True).data
+        spaces = SpaceListSerializer(space_data, many=True).data
+
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
@@ -276,22 +373,176 @@ class PostViewSet(viewsets.ModelViewSet):
             },
         )
 
-    @action(detail=True, methods=["put"], name="Like Post")
-    def add_label(self, request, pk=None):
-        post = self.get_object()
-        for label_id in request.data.get("labels"):
-            label = Label.objects.get(id=label_id)
-            post.label.add(label)
-            post.save()
-        return Response({"detail": "Added label succesfully"}, status=200)
+    def retrieve(self, request, *args, **kwargs):
+        post_obj = self.get_object()
+        print(post_obj)
+        post = PostListSerializer(post_obj).data
+        comments = Comment.objects.filter(post=post_obj.id)
+        comments_data = CommentListSerializer(comments,many=True).data
+        if request.user.is_anonymous == False:
+            user = request.user
+            if user.id ==post_obj.owner.id:
+                return render(
+                    request,
+                    "ownPostDetail.html",
+                    {
+                        "post": post,
+                        "comments": comments_data,
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+            else:
+                return render(
+                    request,
+                    "postDetail.html",
+                    {
+                        "post": post,
+                        "comments": comments_data,
 
-    @action(detail=True, methods=["put"], name="Add Space")
-    def add_space(self, request, pk=None):
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+        else:
+            return render(
+                request, "mainPosts.html", {"space": data, "DOMAIN_URL": DOMAIN_URL}
+            )
+
+    @action(detail=True, methods=["post"], name="Like Post")
+    def add_comment(self, request, pk=None):
         post = self.get_object()
-        space = Space.objects.get(id=request.data.get("space"))
-        post.space = space.id
+        user = request.user
+        comment = request.data.get("comment")
+        user_obj = User.objects.get(id=user.id)
+        comment_obj = Comment.objects.create(user=user_obj,post=post,comment=comment)
+        comments = Comment.objects.filter(post=post.id)
+        print(comments)
+        comment_data = CommentListSerializer(comments,many=True).data
+        data = PostListSerializer(post).data
+        user = request.user
+        if user.id ==post.owner.id:        
+            return render(
+            request,
+            "ownPostDetail.html",
+            {
+                "posts": data,
+                "comments": comment_data,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+        else:
+            return render(
+                    request,
+                    "postDetail.html",
+                    {
+                        "comments": comment_data,
+                        "post": data,
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+
+    @action(detail=True, methods=["get"], name="Like Post")
+    def delete(self, request, pk=None):
+        post = self.get_object()
+        space = SpaceListSerializer(Space.objects.get(id=post.space.id)).data
+        data = PostListSerializer(Post.objects.filter(space=post.space.id),many=True).data
+        user = request.user
+        if user.id == post.owner.id:
+            post.delete()
+        return render(
+            request,
+            "spacePosts.html",
+            {
+                "space":space,
+                "posts": data,
+                "owner": user.first_name + " " + user.last_name,
+                "DOMAIN_URL": DOMAIN_URL,
+            },
+        )
+    @action(detail=True, methods=["get"], name="Like Post")
+    def edit_form(self, request, pk=None):
+        post_obj = self.get_object()
+        print(post_obj)
+        post = PostListSerializer(post_obj).data
+        labels=Label.objects.all()
+        post_labels = post_obj.label.all()
+        if request.user.is_anonymous == False:
+            user = request.user
+            if user.id ==post_obj.owner.id:
+                return render(
+                    request,
+                    "editPost.html",
+                    {
+                        "post": post,
+                        "labels":labels,
+                        "post_labels":post_labels,
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+            else:
+                return render(
+                    request,
+                    "postDetail.html",
+                    {
+                        "post": post,
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+        else:
+            return render(
+                request, "mainPosts.html", {"space": data, "DOMAIN_URL": DOMAIN_URL}
+            )
+    @action(detail=True, methods=["post"], name="Like Post")
+    def edit(self, request, pk=None):
+        post = self.get_object()
+        title= request.data.get("title")
+        if title:
+            post.title = title
+        description= request.data.get("description")
+        if description:
+            post.description=description
+        post_link= request.data.get("post_link")
+        if post_link:
+            post.post_link=post_link
+        platform= request.data.get("platform")
+        if platform:
+            post.platform=platform
+        image= request.data.get("image")
+        if image:
+            post.image=image
+        label = request.data.get("label")
+        if label:
+            post.label.set(label)
         post.save()
-        return Response({"detail": "Added to space succesfully"}, status=200)
+        data = PostListSerializer(post).data
+
+        user = request.user
+        if user.id ==post.owner.id:
+            return render(
+                    request,
+                    "ownPostDetail.html",
+                    {
+                        "post": data,
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+        else:
+            return render(
+                    request,
+                    "postDetail.html",
+                    {
+                        "post": data,
+                        "owner": user.first_name + " " + user.last_name,
+                        "DOMAIN_URL": DOMAIN_URL,
+                    },
+                )
+
 
     def list(self, request, *args, **kwargs):
         data = Post.objects.all().order_by("-id")
@@ -332,3 +583,4 @@ class PostViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
