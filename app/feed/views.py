@@ -99,11 +99,15 @@ class SpaceViewSet(viewsets.ModelViewSet):
         labels = Label.objects.all()
         if request.user.is_anonymous == False:
             user = request.user
+            user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+            user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data            
             return render(
                 request,
                 "spacePosts.html",
                 {
                     "space": data,
+                    "user_liked_posts":user_liked_posts,
+                    "user_bookmarked_posts":user_bookmarked_posts,
                     "labels": labels,
                     "owner": user.first_name + " " + user.last_name,
                     "DOMAIN_URL": DOMAIN_URL,
@@ -162,11 +166,15 @@ class PostViewSet(viewsets.ModelViewSet):
         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         data = Post.objects.all().order_by("-id")
         posts = PostListSerializer(data, many=True).data
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data      
         return render(
             request,
             "posts.html",
             {
                 "posts": posts,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -180,19 +188,39 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         data = Post.objects.all().order_by("-id")
         posts = PostListSerializer(data, many=True).data
-        space_obj = Space.objects.get(id=post.space.id)
-        space = SpaceListSerializer(space_obj).data
-        # return Response({"detail":"Liked succesfully"},status=200)
-        return render(
-            request,
-            "spacePosts.html",
-            {
-                "space":space,
-                "posts": posts,
-                "owner": user.first_name + " " + user.last_name,
-                "DOMAIN_URL": DOMAIN_URL,
-            },
-        )
+        labels=Label.objects.all()
+
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data
+        if post.space:
+            space_obj = Space.objects.get(id=post.space.id)
+            space = SpaceListSerializer(space_obj).data
+            return render(
+                request,
+                "spacePosts.html",
+                {
+                    "space":space,
+                    "posts": posts,
+                    "user_liked_posts":user_liked_posts,
+                    "user_bookmarked_posts":user_bookmarked_posts,
+                    "owner": user.first_name + " " + user.last_name,
+                    "DOMAIN_URL": DOMAIN_URL,
+                },
+            )
+        else:
+            return render(
+                request,
+                "posts.html",
+                {
+                    "posts": posts,
+                    "labels": labels,
+                    "user_liked_posts":user_liked_posts,
+                    "user_bookmarked_posts":user_bookmarked_posts,
+                    "owner": user.first_name + " " + user.last_name,
+                    "DOMAIN_URL": DOMAIN_URL,
+                },
+            )
+
 
     @action(detail=True, methods=["get"], name="Like Post")
     def undo_like_post(self, request, pk=None):
@@ -202,13 +230,16 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         data = Post.objects.filter(liked_by__id=user.id).order_by("-id")
         posts = PostListSerializer(data, many=True).data
-
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data    
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
             "likedPosts.html",
             {
                 "posts": posts,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -224,6 +255,8 @@ class PostViewSet(viewsets.ModelViewSet):
         posts = PostListSerializer(data, many=True).data
         space_obj = Space.objects.get(id=post.space.id)
         space = SpaceListSerializer(space_obj).data
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
@@ -231,6 +264,8 @@ class PostViewSet(viewsets.ModelViewSet):
             {
                 "space":space,
                 "posts": posts,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -244,13 +279,16 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         data = Post.objects.filter(bookmarked_by__id=user.id).order_by("-id")
         posts = PostListSerializer(data, many=True).data
-
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data    
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
             "bookmarkedPosts.html",
             {
                 "posts": posts,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -261,13 +299,16 @@ class PostViewSet(viewsets.ModelViewSet):
         user = User.objects.filter(id=request.user.id).first()
         data = Post.objects.filter(liked_by__id=user.id).order_by("-id")
         posts = PostListSerializer(data, many=True).data
-
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data  
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
             "likedPosts.html",
             {
                 "posts": posts,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -277,13 +318,16 @@ class PostViewSet(viewsets.ModelViewSet):
         user = User.objects.filter(id=request.user.id).first()
         data = Post.objects.filter(bookmarked_by__id=user.id).order_by("-id")
         posts = PostListSerializer(data, many=True).data
-
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data  
         # return Response({"detail":"Liked succesfully"},status=200)
         return render(
             request,
             "bookmarkedPosts.html",
             {
                 "posts": posts,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -449,6 +493,8 @@ class PostViewSet(viewsets.ModelViewSet):
         post = self.get_object()
         space = SpaceListSerializer(Space.objects.get(id=post.space.id)).data
         data = PostListSerializer(Post.objects.filter(space=post.space.id),many=True).data
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data 
         user = request.user
         if user.id == post.owner.id:
             post.delete()
@@ -458,6 +504,8 @@ class PostViewSet(viewsets.ModelViewSet):
             {
                 "space":space,
                 "posts": data,
+                "user_liked_posts":user_liked_posts,
+                "user_bookmarked_posts":user_bookmarked_posts,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -550,11 +598,15 @@ class PostViewSet(viewsets.ModelViewSet):
         posts = PostListSerializer(data, many=True).data
         if request.user.is_anonymous == False:
             user = request.user
+            user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+            user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data 
             return render(
                 request,
                 "posts.html",
                 {
                     "posts": posts,
+                    "user_liked_posts":user_liked_posts,
+                    "user_bookmarked_posts":user_bookmarked_posts,
                     "labels": labels,
                     "owner": user.first_name + " " + user.last_name,
                     "DOMAIN_URL": DOMAIN_URL,

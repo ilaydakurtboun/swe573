@@ -151,11 +151,14 @@ class UserViewSet(viewsets.ModelViewSet):
         user = request.user
         users = User.objects.exclude(id=request.user.id)
         user_data = UserListSerializer(users,many=True).data
+        friends=Friends.objects.get(owner=user.id)
+        followings=UserListSerializer(friends.friend_list.all(),many=True).data
         return render(
             request,
             "possibleToKnow.html",
             {
                 "users":user_data,
+                "followings":followings,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -165,6 +168,8 @@ class UserViewSet(viewsets.ModelViewSet):
         user = request.user
         followers = []
         friends = Friends.objects.filter(friend_list__id__contains=user.id)
+        following_friends=Friends.objects.get(owner=user.id)
+        followings=UserListSerializer(following_friends.friend_list.all(),many=True).data
         for friend in friends:
             followers.append(UserListSerializer(friend.owner))
         return render(
@@ -172,37 +177,41 @@ class UserViewSet(viewsets.ModelViewSet):
             "follower.html",
             {
                 "users":followers,
+                "followings":followings,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
         )
-    @action(detail=False, methods=["post"], name="See Profile")
+    @action(detail=True, methods=["get"], name="See Profile")
     def follow(self, request, *args, **kwargs):
         user = request.user
         friends = Friends.objects.get(owner=user)
-        follow_people = request.data.get("follow_people")
-        friends.friend_list.add(follow_people)
+        follow_people = self.get_object()
+        friends.friend_list.add(follow_people.id)
         friends.save()
         users = User.objects.exclude(id=request.user.id)
         user_data = UserListSerializer(users,many=True).data
+        following_friends=Friends.objects.get(owner=user.id)
+        followings=UserListSerializer(following_friends.friend_list.all(),many=True).data
         return render(
             request,
             "possibleToKnow.html",
             {
                 "users":user_data,
+                "followings":followings,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
         )
-    @action(detail=False, methods=["post"], name="See Profile")
+    @action(detail=True, methods=["get"], name="See Profile")
     def unfollow(self, request, *args, **kwargs):
         user = request.user
         friends = Friends.objects.get(owner=user)
-        follow_people = request.data.get("follow_people")
-        friends.friend_list.remove(follow_people)
+        follow_people = self.get_object()
+        friends.friend_list.remove(follow_people.id)
         friends.save()
-        users = User.objects.exclude(id=request.user.id)
-        user_data = UserListSerializer(users,many=True).data
+        friends=Friends.objects.get(owner=user.id)
+        user_data=UserListSerializer(friends.friend_list.all(),many=True).data
         return render(
             request,
             "following.html",

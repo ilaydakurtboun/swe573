@@ -220,28 +220,43 @@
                         <div class="User_List">
                             <div class="User"><b> {{ user.first_name }} {{user.last_name}}</b> <br>
                             </div>
-                            <input type="hidden" name="follow_people" value="{{user.id}}">
+                            {% if user in followings %}
+                            <button onclick="window.location.href='{{DOMAIN_URL}}/user/' + {{user.id}} + '/unfollow/'"
+                                name="Bookmark" type="button"
+                                style="background-color: rgba(255, 255, 255, 1);
+                                                                                                                                                            width: 100px;
+                                                                                                                                                            height: 40px;
+                                                                                                                                                            border-radius: 10px;
+                                                                                                                                                            top: -10px;
+                                                                                                                                                            left: 450px;
+                                                                                                                                                            font-size: 15px;
+                                                                                                                                                            text-align: center;
+                                                                                                                                                            position: relative;
+                                                                                                                                                            ">Unfollow</button>
 
-                            <div class=Submit>
-                                <input value="Follow" type="submit" style="background-color: rgba(255, 255, 255, 1);
-                                                                                                        width: 100px;
-                                                                                                        height: 40px;
-                                                                                                        border-radius: 10px;
-                                                                                                        top: -10px;
-                                                                                                        left: 375px;
-                                                                                                        font-size: 15px;
-                                                                                                        text-align: center;
-                                                                                                        position: relative;
-                                                                                                  ">
+                            {% else %}
+                            <button onclick="window.location.href='{{DOMAIN_URL}}/user/' + {{user.id}} + '/follow/'"
+                                name="Bookmark" type="button"
+                                style="background-color: rgba(255, 255, 255, 1);
+                                                                                                                                                            width: 100px;
+                                                                                                                                                            height: 40px;
+                                                                                                                                                            border-radius: 10px;
+                                                                                                                                                            top: -10px;
+                                                                                                                                                            left: 450px;
+                                                                                                                                                            font-size: 15px;
+                                                                                                                                                            text-align: center;
+                                                                                                                                                            position: relative;
+                                                                                                                                              ">Follow</button>
 
-                            </div>
+                            {% endif %}
+
                             <button
                                 onclick="window.location.href='{{DOMAIN_URL}}/feed/space/' + {{user.id}} + '/person_spaces/'"
                                 name="SeeProfile" type="button" style="background-color:rgba(255, 255, 255, 1);
                                                                                                        width: 100px;
                                                                                                         height: 40px;
                                                                                                         border-radius: 10px;
-                                                                                                        top: -50px;
+                                                                                                        top: -10px;
                                                                                                         left: 200px;
                                                                                                         font-size: 15px;
                                                                                                         text-align: center;
@@ -335,21 +350,13 @@
                               text-align: center;
                               position: relative;
                                 ">Your Bookmarks</button>
-                    <button name="Notifications" type="button" style="background-color:  rgba(255, 255, 255, 1);
-                              width: 100%;
-                              height: 40px;
-                              border-radius: 10px;
-                              top: 115px;
-                              font-size: 15px;
-                              text-align: center;
-                              position: relative;
-                                ">Notifications</button>
+
                     <button onclick="window.location.href='{{DOMAIN_URL}}/user/logout/'" name="Logout" type="button"
                         style="background-color:  rgba(255, 255, 255, 1);
                               width: 100%;
                               height: 40px;
                               border-radius: 10px;
-                              top: 130px;
+                              top: 115px;
                               font-size: 15px;
                               text-align: center;
                               position: relative;
