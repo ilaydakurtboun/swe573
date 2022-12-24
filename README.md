@@ -2,8 +2,8 @@
 This repository is a project for the class named SWE573 - Software Development Practices in Boğaziçi University Software Engineering Deparment.
 
 # The URLs:
-Project URL: http://44.201.174.233:8000/
-Swagger Documentation: http://44.201.174.233:8000/swagger/
+Project URL: http://44.201.174.233:8000/<br/>
+Swagger Documentation: http://44.201.174.233:8000/swagger/<br/>
 Admin Panel: http://44.201.174.233:8000/admin/
 
 ## To run with docker at local machine:
