@@ -6,6 +6,8 @@ import json
 from rest_framework.exceptions import ValidationError
 
 
+
+
 class SpaceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
@@ -17,17 +19,30 @@ class LabelSerializer(serializers.ModelSerializer):
         model = Label
         fields = "__all__"
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = "__all__"
+
+
+
 
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"
 
+class CommentListSerializer(serializers.ModelSerializer):
+    user = UserListSerializer()
+    class Meta:
+        model = Comment
+        fields = "__all__"
 
 class PostListSerializer(serializers.ModelSerializer):
     owner = UserListSerializer()
     liked_by = UserListSerializer(many=True)
     label = LabelSerializer(many=True)
+    post_review = CommentSerializer(many=True)
 
     class Meta:
         model = Post
@@ -41,3 +56,5 @@ class SpaceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
         fields = "__all__"
+
+

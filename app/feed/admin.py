@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Space, Label, Post
+from .models import Space, Label, Post,Comment
 from import_export.admin import ImportExportActionModelAdmin
 
 
@@ -16,6 +16,12 @@ class SpaceAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
 class SpaceAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     list_display = ("name",)
     list_filter = ("id", "name")
+    group_fieldsets = True
+
+@admin.register(Comment)
+class SpaceAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
+    list_display = ("id",)
+    list_filter = ("id",)
     group_fieldsets = True
 
 
