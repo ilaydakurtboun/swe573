@@ -65,6 +65,7 @@ class SpaceViewSet(viewsets.ModelViewSet):
             "personSpaces.html",
             {
                 "spaces": spaces,
+                "person":person,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
