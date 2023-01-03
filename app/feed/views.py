@@ -65,6 +65,7 @@ class SpaceViewSet(viewsets.ModelViewSet):
             "personSpaces.html",
             {
                 "spaces": spaces,
+                "person":person,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
@@ -491,13 +492,15 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["get"], name="Like Post")
     def delete(self, request, pk=None):
         post = self.get_object()
-        space = SpaceListSerializer(Space.objects.get(id=post.space.id)).data
-        data = PostListSerializer(Post.objects.filter(space=post.space.id),many=True).data
-        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
-        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data 
         user = request.user
         if user.id == post.owner.id:
+            space_id = post.space.id
+            post_id = post.id
             post.delete()
+        space = SpaceListSerializer(Space.objects.get(id=post.space.id)).data
+        data = PostListSerializer(Post.objects.filter(space=space_id),many=True).data
+        user_liked_posts = PostListSerializer(Post.objects.filter(liked_by__id=user.id),many=True).data
+        user_bookmarked_posts = PostListSerializer(Post.objects.filter(bookmarked_by__id=user.id),many=True).data 
         return render(
             request,
             "spacePosts.html",
