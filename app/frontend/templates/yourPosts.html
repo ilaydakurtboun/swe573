@@ -330,6 +330,19 @@
                   <a href='{{post.post_link}}' target="_blank">{{post.post_link}}</a>
                 </div>
               </span>
+              <button onclick="window.location.href='{{DOMAIN_URL}}/feed/post/' + {{post.id}}+'/'" name="SeeDetails"
+                type="button"
+                style="background-color:rgba(255, 255, 255, 1);
+                                                                                                                                  width: relative;
+                                                                                                                                  height: relative;
+                                                                                                                                  border-radius: 10px;
+                                                                                                                                  font-size: 15px; 
+                                                                                                                                  bottom: 0px;
+                                                                                                                                   right:50px; 
+                                                                                                                                  text-align: center;
+                                                                                                                                   position: absolute;  
+                                                                                                                                  ">See
+                Details</button>
             </div>
 
             {% endfor %}
