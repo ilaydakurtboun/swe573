@@ -235,7 +235,37 @@
                 <div class="Person_Information_Section">
                     <span class="Person_Information"><b> {{ person.first_name }}</b> <br>
                         {{person.last_name}}</span>
-                    <div class=Submit>
+                    {% if person_data in followings %}
+                    <button onclick="window.location.href='{{DOMAIN_URL}}/user/' + {{person.id}} + '/unfollow/'"
+                        name="Bookmark" type="button"
+                        style="background-color: rgba(255, 255, 255, 1);
+                                                                                                                                width: 100px;
+                                                                                                                                height: 40px;
+                                                                                                                                border-radius: 10px;
+                                                                                                                                top: 5px;
+                                                                                                                                left: 850px;
+                                                                                                                                font-size: 15px;
+                                                                                                                                text-align: center;
+                                                                                                                                position: absolute;
+                                                                                                                                                                                ">Unfollow</button>
+
+                    {% else %}
+                    <button onclick="window.location.href='{{DOMAIN_URL}}/user/' + {{person.id}} + '/follow/'"
+                        name="Bookmark" type="button"
+                        style="background-color: rgba(255, 255, 255, 1);
+                                                                                                                                width: 100px;
+                                                                                                                                height: 40px;
+                                                                                                                                border-radius: 10px;
+                                                                                                                                 top: 5px;
+                                                                                                                                left: 850px;
+                                                                                                                                font-size: 15px;
+                                                                                                                                text-align: center;
+                                                                                                                                position: absolute;
+                                                                                                                                                                  ">Follow</button>
+
+                    {% endif %}
+
+                    <!-- <div class=Submit>
                         <input value="Follow" type="submit"
                             style="background-color: rgba(255, 255, 255, 1);
                                                                                                                                 width: 100px;
@@ -247,7 +277,7 @@
                                                                                                                                 text-align: center;
                                                                                                                                 position: relative;
                                                                                                                           ">
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="Space_List_Section">

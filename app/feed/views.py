@@ -58,14 +58,19 @@ class SpaceViewSet(viewsets.ModelViewSet):
     def person_spaces(self, request, pk=None):
         user = request.user
         person = User.objects.get(id=pk)
+        person_data = UserListSerializer(person).data
         spaces = Space.objects.filter(owner=person.id).order_by("-id")
         # return Response({"detail":"Liked succesfully"},status=200)
+        following_friends=Friends.objects.get(owner=user.id)
+        followings=UserListSerializer(following_friends.friend_list.all(),many=True).data
         return render(
             request,
             "personSpaces.html",
             {
                 "spaces": spaces,
                 "person":person,
+                "person_data":person_data,
+                "followings":followings,
                 "owner": user.first_name + " " + user.last_name,
                 "DOMAIN_URL": DOMAIN_URL,
             },
