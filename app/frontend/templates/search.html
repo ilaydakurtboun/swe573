@@ -399,7 +399,7 @@
           <ul>
             {% for post in posts %}
             <div class="Post_list"><span class="Post">
-                <div class="Post_Image"> <img src="/media/{{ post.image }}" alt="Post" width="150" height="150">
+                <div class="Post_Image"> <img src="{{ post.image }}" alt="Post" width="150" height="150">
                 </div>
                 <div class="Post_Owner"> <b>{{ post.owner.first_name }} {{ post.owner.last_name }}</b>
                 </div>
